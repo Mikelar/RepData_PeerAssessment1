@@ -1,0 +1,102 @@
+PEER ASSESSMENT 1
+==================
+
+###1. Loading and preprocessing the data
+####1.1. Load the data 
+
+Note: you must first download the necessary dataset into your working directory.
+
+```{r}
+unzip ("repdata-data-activity.zip")
+activity <- read.csv("activity.csv")
+```
+
+###2. What is mean total number of steps taken per day?
+####2.1. Calculate the total number of steps taken per day
+
+```{r}
+sumperday <- aggregate(steps ~ date, data=activity, sum, na.action=na.pass)
+```
+
+####2.2. Make a histogram of the total number of steps taken each day
+
+```{r}
+frecuency <- sumperday[,2]
+hist(frecuency, main = "Histogram of total number of steps taken each day", xlab = "Total number of steps per day")
+```
+
+####2.3. Calculate and report the mean and median of the total number of steps taken per day
+
+```{r}
+meanperday <- aggregate(steps ~ date, data=activity, mean, na.action=na.pass)
+medianperday <- aggregate(steps ~ date, data=activity, median, na.action=na.pass)
+mmperday <- cbind(meanperday, medianperday)
+mmperday <- mmperday[,-3]
+colnames(mmperday) <- c("date", "meanday", "medianday")
+print(mmperday)
+```
+
+###3. What is the average daily activity pattern?
+
+####3.1. Make a time series plot (i.e. type = "l") of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis)
+
+```{r}
+meanperinterval <- aggregate(steps ~ interval, data=activity, mean)
+plot(meanperinterval, type="l", main="Average number of steps taken in each interval")
+```
+
+####3.2. Which 5-minute interval, on average across all the days in the dataset, contains the maximum number of steps?
+
+```{r}
+meanperinterval$interval[which(meanperinterval$steps==max(meanperinterval$steps))]
+```
+
+###4. Imputing missing values
+
+Note that there are a number of days/intervals where there are missing values (coded as NA). The presence of missing days may introduce bias into some calculations or summaries of the data.
+
+####4.1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)
+
+```{r}
+sum(is.na(activity))
+```
+
+####4.2. Devise a strategy for filling in all of the missing values in the dataset.
+
+In each row where there is a missing value, I am going to introduce the average number of steps taken in that 5-minute interval, averaged across all days.
+
+####4.3. Create a new dataset that is equal to the original dataset but with the missing data filled in.
+
+```{r}
+newdata <- activity
+newdata[is.na(newdata)] <- meanperinterval$steps[meanperinterval$interval==newdata[which(is.na(newdata)),3]]
+newdata[is.na(newdata)] <- meanperinterval$steps[meanperinterval$interval==newdata[which(is.na(newdata)),3]]
+newdata[is.na(newdata)] <- meanperinterval$steps[meanperinterval$interval==newdata[which(is.na(newdata)),3]]
+newdata[is.na(newdata)] <- meanperinterval$steps[meanperinterval$interval==newdata[which(is.na(newdata)),3]]
+newdata[is.na(newdata)] <- meanperinterval$steps[meanperinterval$interval==newdata[which(is.na(newdata)),3]]
+newdata[is.na(newdata)] <- meanperinterval$steps[meanperinterval$interval==newdata[which(is.na(newdata)),3]]
+newdata[is.na(newdata)] <- meanperinterval$steps[meanperinterval$interval==newdata[which(is.na(newdata)),3]]
+newdata[is.na(newdata)] <- meanperinterval$steps[meanperinterval$interval==newdata[which(is.na(newdata)),3]]
+```
+
+####4.4. Make a histogram of the total number of steps taken each day and Calculate and report the mean and median total number of steps taken per day. Do these values differ from the estimates from the first part of the assignment? What is the impact of imputing missing data on the estimates of the total daily number of steps?
+
+The new values differ from the first ones in that the NA values now have a new value (always the same for each day that had NA value before). But the Histogram is very similar to the first one. So there is no significant change.
+
+```{r}
+newsumperday <- aggregate(steps ~ date, data=newdata, sum)
+
+newfrecuency <- newsumperday[,2]
+hist(newfrecuency, main = "NEW Histogram of total number of steps taken each day", xlab = "Total number of steps per day")
+
+newmeanperday <- aggregate(steps ~ date, data=newdata, mean)
+newmedianperday <- aggregate(steps ~ date, data=newdata, median)
+newmmperday <- cbind(newmeanperday, newmedianperday)
+newmmperday <- newmmperday[,-3]
+newmmperday <- newmmperday[,-1]
+colnames(newmmperday) <- c("newmeanday", "newmedianday")
+cbind(mmperday, newmmperday)
+```
+
+
+
