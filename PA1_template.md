@@ -105,7 +105,7 @@ medianperday <- median(sumperday[,2], na.rm=TRUE)
 ```
 
 The mean of the total number of steps taken per day is 1.0766189 &times; 10<sup>4</sup>.
-The median of the total number of steps taken per day ir 10765.
+The median of the total number of steps taken per day is 10765.
 
 ###3. What is the average daily activity pattern?
 
@@ -126,7 +126,7 @@ plot(meanperinterval, type="l", main="Average number of steps taken in each inte
 maxinterval <- meanperinterval$interval[which(meanperinterval$steps==max(meanperinterval$steps))]
 ```
 
-The interval 835 contains the maximum number of steps on average.
+The interval number 835 contains the maximum number of steps on average.
 
 ###4. Imputing missing values
 
